@@ -62,29 +62,23 @@ def run():
     dp = DocProc()
     dp.doc_process()  # 讲道理也可以把所有文件信息通过传参传进来
     lda = LDAModel(dp.marklist, dp.all_dict, dp.all_text_num, dp.all_text)#所有数据从文件读取
-    lda.optimization()
-    # 对单独使用lda根据perplexity选择最优的k
 
+    # # 1.--------
+    # # 对单独使用lda根据perplexity选择最优的k
+    # lda.optimization()
 
-    # lda.start()
-    # lda.perplexity()
-
-    # # 对lda的众多主题进行聚类
-    # k = Kcluster(lda.theta,lda.phi)
-    # k.start()
-    #
-    # # 处理聚类结果，距离计算，对每个聚类中的每两个文本计算距离
-    # dc = DistanceCal(lda.theta,k.result,k.newK)
-    # dc.calbycluster()
-
-    # # 算法评价，输入聚类
-    # evaluation(dp.marklist,dc.no_record)
-
-    # dc.js_all()
-    # print(dc.resultdict[(111,112)])
-    # for i in dc.resultdict :
-    #     print(i)
-
+    # 2.------
+    # LDA方法，k内置
+    lda.start()
+    lda.perplexity()
+    # 对lda得到的众多主题进行聚类
+    k = Kcluster(lda.theta,lda.phi)
+    k.start()
+    # 处理聚类结果，距离计算，对每个聚类中的每两个文本计算距离
+    dc = DistanceCal(lda.theta,k.result,k.newK)
+    dc.calbycluster()
+    # 根据样本标记类别进行算法评价
+    evaluation(dp.marklist,dc.no_record)
 
 if __name__ == '__main__':
     run()
